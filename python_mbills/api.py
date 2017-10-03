@@ -44,7 +44,18 @@ class MBillsAPI(object):
 
         return True
 
-    # TODO - add test webhook once granted dev access
+    def test_webhook(self):
+        url = "%s%s" % (self.api_endpoint, constants.TEST_WEBHOOK)
+
+        username = self.base.get_username()
+        password = self.base.get_password(username=username, request_url=url)
+
+        response = requests.get(url, auth=HTTPBasicAuth(username=username, password=password))
+
+        if not self.base.verify_response(response.json()):
+            raise SignatureValidationException('Server signature verification has failed')
+
+        return True
 
     def create_new_sale(self, amount, purpose, payment_reference=None, order_id=None, channel_id=None, capture=True):
         """
