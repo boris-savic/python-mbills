@@ -2,7 +2,7 @@ from distutils.core import setup
 setup(
   name='python_mbills',
   packages=['python_mbills'],
-  version='0.1.0',
+  version='0.1.1',
   description='Python implementation of the Hal MBills APIs.',
   author='Boris Savic',
   author_email='boris70@gmail.com',

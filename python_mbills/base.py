@@ -2,6 +2,7 @@ import time
 import random
 import hashlib
 import warnings
+import binascii
 
 import rsa
 
@@ -21,7 +22,9 @@ class MBillsBase(object):
         Generate nonce per API specification. A random number of lenght 8-15
         :return: integer of specified length (int)
         """
-        return random.randint(10**(self._nonce_length-1), (10**self._nonce_length)-1)
+        nonce =  random.randint(10**(self._nonce_length-1), (10**self._nonce_length)-1)
+        print(nonce)
+        return nonce
 
     def get_username(self):
         """
@@ -75,7 +78,7 @@ class MBillsBase(object):
 
         nonce = auth_json.get('nonce', '')
         timestamp = auth_json.get('timestamp', '')
-        signature = auth_json.get('signature', '')
+        signature = binascii.unhexlify(auth_json.get('signature', ''))
 
         signed_id = response_json.get(signed_id_name, '')
 
