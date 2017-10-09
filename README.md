@@ -11,7 +11,7 @@ Current support only provides what's absolutely necessary to process online paym
 
 ## Installation
 
-    $ pip install python_mbills
+    $ pip install python-mbills
     
 ## Usage
 
@@ -23,7 +23,7 @@ public_key = "...public RSA key string..."
 
 api = MBillsAPI(api_key='my_api_key',
                 shared_secret='my_secret_key',
-                mbills_rsa_pub_key=pub_key)
+                mbills_rsa_pub_key=public_key)
 ```
 
 
@@ -31,6 +31,9 @@ api = MBillsAPI(api_key='my_api_key',
 
 You can test your **api_key**, **shared_secret** and **mbills_rsa_pub_key** by calling 
 *test_api_parameters_and_signature_verification* function.
+
+If you want to skip the RSA signature verification, initialize the MBillsAPI with **mbills_rsa_pub_key** set to None. 
+Even though it is not recommended to skip the signature verification, it might come in handy during development.
 
 ```python
 try:

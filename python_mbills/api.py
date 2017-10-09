@@ -11,15 +11,15 @@ class MBillsAPI(object):
     def __init__(self,
                  api_key,
                  shared_secret,
-                 mbills_rsa_pub_key,
+                 mbills_rsa_pub_key=None,
                  nonce_length=15,
-                 api_endpoint="https://private-90f7d-mbills.apiary-mock.com",
+                 api_endpoint="https://demo3.halcom.com/MBillsWS",
                  currency='EUR'):
         """
         Initialize the MBills API and Base class.
         :param api_key: 
         :param shared_secret: 
-        :param mbills_rsa_pub_key: 
+        :param mbills_rsa_pub_key: If None, no verification will be made 
         :param nonce_length: (default set to 15)
         :param api_endpoint: (default set to Apiary mock api)
         """
@@ -89,7 +89,7 @@ class MBillsAPI(object):
         username = self.base.get_username()
         password = self.base.get_password(username=username, request_url=url)
 
-        response = requests.post(url, data=request_data, auth=HTTPBasicAuth(username=username, password=password))
+        response = requests.post(url, json=request_data, auth=HTTPBasicAuth(username=username, password=password))
 
         if not self.base.verify_response(response.json()):
             raise SignatureValidationException('Server signature verification has failed')

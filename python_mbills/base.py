@@ -1,6 +1,7 @@
 import time
 import random
 import hashlib
+import warnings
 
 import rsa
 
@@ -10,7 +11,7 @@ class MBillsBase(object):
         self.api_key = api_key
         self.shared_secret = shared_secret
 
-        self._pub_key = rsa.PublicKey.load_pkcs1_openssl_pem(mbills_rsa_pub_key)
+        self._pub_key = rsa.PublicKey.load_pkcs1_openssl_pem(mbills_rsa_pub_key) if mbills_rsa_pub_key else None
 
         assert 8 <= nonce_length <= 15, "Nonce must be of length between 8-15."
         self._nonce_length = nonce_length
@@ -50,6 +51,10 @@ class MBillsBase(object):
         :return: true of false
         """
         message = "%s%s%s%s" % (self.api_key, nonce, timestamp, signed_id)
+
+        if self._pub_key is None:
+            warnings.warn("Skipping RSA signature verification. Please pass public key on class initialization to ensure highest level of security!")
+            return True
 
         try:
             rsa.verify(message, signature, self._pub_key)
