@@ -62,7 +62,7 @@ class MBillsBase(object):
             return True
 
         try:
-            rsa.verify(message, signature, self._pub_key)
+            rsa.verify(message.encode('utf-8'), signature, self._pub_key)
         except rsa.VerificationError:
             return False
 
