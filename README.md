@@ -89,11 +89,33 @@ except SignatureValidationException:
     print("Failed to verify signature")
 ```
 
+### Capture preauthroization
+
+Capture preauthorization. You can use this API only if you have set capture to False when creating the sale.
+
+```python
+try:
+    response_dict = api.capture_sale(transaction_id=tx_id,
+                                     capture_amount=100,
+                                     message="Your message to the customer")
+except SignatureValidationException:
+    print("Failed to verify signature")
+```
+
+### Void preauthroization
+
+To void a reserved funds, if for instance you can not deliver the goods, you can void the sale. 
+```python
+try:
+    response_dict = api.void_preauthorization(transaction_id=tx_id,
+                                              message="Your message to the customer")
+except SignatureValidationException:
+    print("Failed to verify signature")
+```
+
 ## Not yet supported APIs
 
 List of currently not supported APIs:
- - Capture Sale
- - Void Preauth
  - Attach Document - ZOI
  - Last 24 
  - Get Your Wallet Balance

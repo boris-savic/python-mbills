@@ -112,7 +112,68 @@ class MBillsAPI(object):
 
         response = requests.get(url, auth=HTTPBasicAuth(username=username, password=password))
 
+        # TODO - handle 404 errors - raise TransactionDoesNotExist
+
         if not self.base.verify_response(response.json()):
             raise SignatureValidationException('Server signature verification has failed')
 
         return response.json()
+
+    def capture_sale(self, transaction_id, capture_amount, message=None):
+        """
+        Capture existing preauth.
+
+        :param transaction_id:
+        :param capture_amount:
+        :param message:
+        :return: status code
+        """
+        request_data = {
+            "amount": capture_amount,
+            "currency": self.currency,
+            "message": message
+        }
+
+        url = "%s%s%s/capture" % (self.api_endpoint, constants.TRANSACTION_STATUS_ENDPOINT, transaction_id)
+
+        username = self.base.get_username()
+        password = self.base.get_password(username=username, request_url=url)
+
+        response = requests.put(url, json=request_data, auth=HTTPBasicAuth(username=username, password=password))
+
+        if not self.base.verify_response(response.json()):
+            raise SignatureValidationException('Server signature verification has failed')
+
+        response_json = response.json()
+
+        # TODO - handle 404 errors - raise TransactionDoesNotExist
+
+        return response_json.get('status')
+
+    def void_preauthorization(self, transaction_id, message=None):
+        """
+        Void existing preauthorization.
+
+        :param transaction_id:
+        :param message:
+        :return: status code
+        """
+        request_data = {
+            "message": message
+        }
+
+        url = "%s%s%s/void" % (self.api_endpoint, constants.TRANSACTION_STATUS_ENDPOINT, transaction_id)
+
+        username = self.base.get_username()
+        password = self.base.get_password(username=username, request_url=url)
+
+        response = requests.put(url, json=request_data, auth=HTTPBasicAuth(username=username, password=password))
+
+        if not self.base.verify_response(response.json()):
+            raise SignatureValidationException('Server signature verification has failed')
+
+        response_json = response.json()
+
+        # TODO - handle 404 errors - raise TransactionDoesNotExist
+
+        return response_json.get('status')
