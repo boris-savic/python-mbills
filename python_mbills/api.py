@@ -69,7 +69,7 @@ class MBillsAPI(object):
         :return: tuple (transaction_id, payment_token_number, status)
         """
         request_data = {
-            "amount": amount,
+            "amount": self.base.convert_decimal_to_hundreds(amount),
             "currency": self.currency,
             "purpose": purpose,
             "capture": capture

@@ -4,6 +4,8 @@ import hashlib
 import warnings
 import binascii
 
+from decimal import Decimal, ROUND_FLOOR
+
 import rsa
 
 
@@ -83,3 +85,11 @@ class MBillsBase(object):
         signed_id = response_json.get(signed_id_name, '')
 
         return self.verify_signature(signature=signature, nonce=nonce, timestamp=timestamp, signed_id=signed_id)
+
+    def convert_decimal_to_hundreds(self, amount):
+        """
+        Convert Decimal(10.10) to string "1010"
+        :param amount: 
+        :return: 
+        """
+        return str((amount.quantize(Decimal('.01'), rounding=ROUND_FLOOR) * 100).quantize(Decimal('0')))
