@@ -67,7 +67,7 @@ Response:
 
 ```python
 try:
-    tx_id, payment_token_number, status = api.create_new_sale(amount=100,
+    tx_id, payment_token_number, status = api.create_new_sale(amount=Decimal('10.00'),
                                                               purpose='Purpose of the payment',
                                                               payment_reference=None,
                                                               order_id=None,
@@ -96,7 +96,7 @@ Capture preauthorization. You can use this API only if you have set capture to F
 ```python
 try:
     response_dict = api.capture_sale(transaction_id=tx_id,
-                                     capture_amount=100,
+                                     capture_amount=Decimal('10.00'),
                                      message="Your message to the customer")
 except SignatureValidationException:
     print("Failed to verify signature")
