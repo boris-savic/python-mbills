@@ -4,7 +4,7 @@ from requests.auth import HTTPBasicAuth
 
 from python_mbills.base import MBillsBase
 from python_mbills import constants
-from python_mbills.exceptions import SignatureValidationException
+from python_mbills.exceptions import SignatureValidationException, TransactionDoesNotExist
 
 
 class MBillsAPI(object):
@@ -112,7 +112,8 @@ class MBillsAPI(object):
 
         response = requests.get(url, auth=HTTPBasicAuth(username=username, password=password))
 
-        # TODO - handle 404 errors - raise TransactionDoesNotExist
+        if response.status_code == 404:
+            raise TransactionDoesNotExist('Wrong transaction ID!')
 
         if not self.base.verify_response(response.json()):
             raise SignatureValidationException('Server signature verification has failed')
@@ -129,7 +130,7 @@ class MBillsAPI(object):
         :return: status code
         """
         request_data = {
-            "amount": capture_amount,
+            "amount": self.base.convert_decimal_to_hundreds(capture_amount),
             "currency": self.currency,
             "message": message
         }
@@ -141,12 +142,13 @@ class MBillsAPI(object):
 
         response = requests.put(url, json=request_data, auth=HTTPBasicAuth(username=username, password=password))
 
+        if response.status_code == 404:
+            raise TransactionDoesNotExist('Wrong transaction ID!')
+
         if not self.base.verify_response(response.json()):
             raise SignatureValidationException('Server signature verification has failed')
 
         response_json = response.json()
-
-        # TODO - handle 404 errors - raise TransactionDoesNotExist
 
         return response_json.get('status')
 
@@ -169,11 +171,12 @@ class MBillsAPI(object):
 
         response = requests.put(url, json=request_data, auth=HTTPBasicAuth(username=username, password=password))
 
+        if response.status_code == 404:
+            raise TransactionDoesNotExist('Wrong transaction ID!')
+
         if not self.base.verify_response(response.json()):
             raise SignatureValidationException('Server signature verification has failed')
 
         response_json = response.json()
-
-        # TODO - handle 404 errors - raise TransactionDoesNotExist
 
         return response_json.get('status')

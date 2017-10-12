@@ -24,9 +24,7 @@ class MBillsBase(object):
         Generate nonce per API specification. A random number of lenght 8-15
         :return: integer of specified length (int)
         """
-        nonce =  random.randint(10**(self._nonce_length-1), (10**self._nonce_length)-1)
-        print(nonce)
-        return nonce
+        return random.randint(10**(self._nonce_length-1), (10**self._nonce_length)-1)
 
     def get_username(self):
         """
