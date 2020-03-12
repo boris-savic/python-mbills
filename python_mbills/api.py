@@ -198,7 +198,7 @@ class MBillsAPI(object):
         username = self.base.get_username()
         password = self.base.get_password(username=username, request_url=url)
 
-        response = requests.put(url, json=request_data, auth=HTTPBasicAuth(username=username, password=password))
+        response = requests.post(url, json=request_data, auth=HTTPBasicAuth(username=username, password=password))
 
         if response.status_code == 404:
             raise TransactionDoesNotExist('Wrong transaction ID!')
