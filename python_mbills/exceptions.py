@@ -5,3 +5,7 @@ class SignatureValidationException(Exception):
 
 class TransactionDoesNotExist(Exception):
     pass
+
+
+class InsufficientFunds(Exception):
+    pass

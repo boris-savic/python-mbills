@@ -4,7 +4,7 @@ from requests.auth import HTTPBasicAuth
 
 from python_mbills.base import MBillsBase
 from python_mbills import constants
-from python_mbills.exceptions import SignatureValidationException, TransactionDoesNotExist
+from python_mbills.exceptions import SignatureValidationException, TransactionDoesNotExist, InsufficientFunds
 
 
 class MBillsAPI(object):
@@ -207,5 +207,8 @@ class MBillsAPI(object):
             raise SignatureValidationException('Server signature verification has failed')
 
         response_json = response.json()
+
+        if response_json.get('status') == -3:
+            raise InsufficientFunds('Cannot perform refund. Insufficient funds on your wallet!')
 
         return response_json.get('status')

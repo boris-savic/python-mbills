@@ -2,12 +2,12 @@ from distutils.core import setup
 setup(
   name='python_mbills',
   packages=['python_mbills'],
-  version='0.1.6',
+  version='0.1.7',
   description='Python implementation of the Hal MBills APIs.',
   author='Boris Savic',
   author_email='boris70@gmail.com',
   url='https://github.com/boris-savic/python-mbills',
-  download_url='https://github.com/boris-savic/python-mbills/archive/0.1.6.tar.gz',
+  download_url='https://github.com/boris-savic/python-mbills/archive/0.1.7.tar.gz',
   keywords=['mbills', 'halcom', ],
   classifiers=[],
   install_requires=[
