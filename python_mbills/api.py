@@ -180,3 +180,32 @@ class MBillsAPI(object):
         response_json = response.json()
 
         return response_json.get('status')
+
+    def refund_transaction(self, transaction_id, refund_amount):
+        """
+        Refund the transaction - refund only the amount specified.
+        :param transaction_id:
+        :return:
+        """
+
+        request_data = {
+            "amount": self.base.convert_decimal_to_hundreds(refund_amount),
+            "currency": self.currency,
+        }
+
+        url = f"{self.api_endpoint}{constants.TRANSACTION_STATUS_ENDPOINT}{transaction_id}/refund"
+
+        username = self.base.get_username()
+        password = self.base.get_password(username=username, request_url=url)
+
+        response = requests.put(url, json=request_data, auth=HTTPBasicAuth(username=username, password=password))
+
+        if response.status_code == 404:
+            raise TransactionDoesNotExist('Wrong transaction ID!')
+
+        if not self.base.verify_response(response.json()):
+            raise SignatureValidationException('Server signature verification has failed')
+
+        response_json = response.json()
+
+        return response_json.get('status')
